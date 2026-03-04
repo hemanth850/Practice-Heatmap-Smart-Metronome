@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice Heatmap + Smart Metronome</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Practice Heatmap + Smart Metronome</h1>
+
+      <section class="panel">
+        <h2>Practice Session</h2>
+        <form id="session-form">
+          <label>
+            Piece
+            <input id="piece-name" required placeholder="Etude Op.10 No.1" />
+          </label>
+          <label>
+            Base BPM
+            <input id="base-bpm" type="number" min="30" max="260" value="80" required />
+          </label>
+          <label>
+            Notes
+            <textarea id="notes" rows="2" placeholder="Trouble in bar 24"></textarea>
+          </label>
+
+          <div class="buttons">
+            <button type="button" id="start-session">Start Session</button>
+            <button type="button" id="stop-session" disabled>Stop Session</button>
+            <button type="button" id="start-metro">Start Metronome</button>
+            <button type="button" id="stop-metro" disabled>Stop Metronome</button>
+          </div>
+
+          <label class="check">
+            <input type="checkbox" id="smart-ramp" checked />
+            Smart ramp (+2 BPM every 16 beats)
+          </label>
+        </form>
+
+        <div class="status-row">
+          <span id="session-status">Session: idle</span>
+          <span id="metro-status">Metronome: idle</span>
+          <span id="beat-indicator">Beat: -</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Dashboard</h2>
+        <div class="stats">
+          <article>
+            <h3>Total Minutes</h3>
+            <p id="stat-minutes">0</p>
+          </article>
+          <article>
+            <h3>Average BPM</h3>
+            <p id="stat-bpm">0</p>
+          </article>
+          <article>
+            <h3>Streak (days)</h3>
+            <p id="stat-streak">0</p>
+          </article>
+          <article>
+            <h3>Sessions</h3>
+            <p id="stat-sessions">0</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Practice Heatmap</h2>
+        <div id="heatmap" class="heatmap"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Recent Sessions</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Piece</th>
+              <th>Minutes</th>
+              <th>BPM</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="sessions-body"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
