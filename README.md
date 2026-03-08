@@ -5,6 +5,7 @@ MVP web app to track music practice sessions, visualize consistency, and train w
 ## Features
 
 - Session logging with piece name, BPM, minutes, and notes
+- Edit/delete existing sessions
 - Smart metronome with optional auto-ramp (+2 BPM every 16 beats)
 - Dashboard cards: total minutes, average BPM, streak, session count
 - 14x7 style heatmap over recent days
@@ -29,6 +30,8 @@ Open `http://localhost:3000`.
 
 - `GET /api/sessions` -> latest sessions
 - `POST /api/sessions` -> create session
+- `PUT /api/sessions/:id` -> update session
+- `DELETE /api/sessions/:id` -> remove session
 - `GET /api/stats` -> aggregate stats
 
 ## Next Improvements
