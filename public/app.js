@@ -27,6 +27,8 @@ const ui = {
   statSessions: document.getElementById("stat-sessions"),
   sessionsBody: document.getElementById("sessions-body"),
   heatmap: document.getElementById("heatmap"),
+  weeklyChart: document.getElementById("weekly-chart"),
+  monthlyChart: document.getElementById("monthly-chart"),
 };
 
 function fmtDate(iso) {
@@ -151,10 +153,91 @@ function renderSessions(sessions) {
   }
 }
 
+function mondayFor(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function monthStartFor(date) {
+  const d = new Date(date);
+  d.setDate(1);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function renderBarChart(container, points) {
+  container.innerHTML = "";
+  const max = Math.max(1, ...points.map((p) => p.value));
+  for (const point of points) {
+    const wrap = document.createElement("div");
+    wrap.className = "bar-wrap";
+
+    const value = document.createElement("div");
+    value.className = "bar-value";
+    value.textContent = point.value;
+
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.height = `${Math.max(6, Math.round((point.value / max) * 130))}px`;
+    bar.title = `${point.label}: ${point.value} min`;
+
+    const label = document.createElement("div");
+    label.className = "bar-label";
+    label.textContent = point.label;
+
+    wrap.append(value, bar, label);
+    container.appendChild(wrap);
+  }
+}
+
+function renderTrends(sessions) {
+  const weeklyBuckets = {};
+  const monthlyBuckets = {};
+  const now = new Date();
+
+  for (let i = 7; i >= 0; i -= 1) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i * 7);
+    const week = mondayFor(d).toISOString().slice(0, 10);
+    weeklyBuckets[week] = 0;
+  }
+  for (let i = 5; i >= 0; i -= 1) {
+    const d = new Date(now);
+    d.setMonth(d.getMonth() - i);
+    const month = monthStartFor(d).toISOString().slice(0, 7);
+    monthlyBuckets[month] = 0;
+  }
+
+  for (const s of sessions) {
+    const date = new Date(s.started_at);
+    const weekKey = mondayFor(date).toISOString().slice(0, 10);
+    const monthKey = monthStartFor(date).toISOString().slice(0, 7);
+    if (weekKey in weeklyBuckets) weeklyBuckets[weekKey] += s.minutes;
+    if (monthKey in monthlyBuckets) monthlyBuckets[monthKey] += s.minutes;
+  }
+
+  const weeklyPoints = Object.entries(weeklyBuckets).map(([key, value]) => ({
+    label: key.slice(5),
+    value,
+  }));
+  const monthlyPoints = Object.entries(monthlyBuckets).map(([key, value]) => ({
+    label: key.slice(2),
+    value,
+  }));
+
+  renderBarChart(ui.weeklyChart, weeklyPoints);
+  renderBarChart(ui.monthlyChart, monthlyPoints);
+}
+
 async function refreshSessions() {
   const sessions = await api("/api/sessions");
   renderSessions(sessions);
   renderHeatmap(sessions);
+  renderTrends(sessions);
 }
 
 async function editSession(sessionId) {
