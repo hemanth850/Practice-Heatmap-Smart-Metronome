@@ -140,6 +140,12 @@ function renderSessions(sessions) {
       <td>${s.minutes}</td>
       <td>${s.bpm}</td>
       <td>${s.notes || ""}</td>
+      <td>
+        <div class="row-actions">
+          <button class="tiny-btn" data-action="edit" data-id="${s.id}">Edit</button>
+          <button class="tiny-btn danger" data-action="delete" data-id="${s.id}">Delete</button>
+        </div>
+      </td>
     `;
     ui.sessionsBody.appendChild(tr);
   }
@@ -149,6 +155,42 @@ async function refreshSessions() {
   const sessions = await api("/api/sessions");
   renderSessions(sessions);
   renderHeatmap(sessions);
+}
+
+async function editSession(sessionId) {
+  const sessions = await api("/api/sessions");
+  const target = sessions.find((s) => s.id === sessionId);
+  if (!target) {
+    alert("Session not found.");
+    return;
+  }
+
+  const pieceName = prompt("Piece name:", target.piece_name);
+  if (!pieceName) return;
+  const minutes = Number(prompt("Minutes:", String(target.minutes)));
+  const bpm = Number(prompt("BPM:", String(target.bpm)));
+  const notes = prompt("Notes:", target.notes || "") ?? "";
+
+  if (!minutes || !bpm) {
+    alert("Minutes and BPM are required.");
+    return;
+  }
+
+  await api(`/api/sessions/${sessionId}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      pieceName: pieceName.trim(),
+      minutes,
+      bpm,
+      notes,
+    }),
+  });
+}
+
+async function deleteSession(sessionId) {
+  const ok = confirm("Delete this session?");
+  if (!ok) return;
+  await api(`/api/sessions/${sessionId}`, { method: "DELETE" });
 }
 
 ui.startSession.addEventListener("click", () => {
@@ -195,6 +237,21 @@ ui.stopSession.addEventListener("click", async () => {
 
 ui.startMetro.addEventListener("click", startMetronome);
 ui.stopMetro.addEventListener("click", stopMetronome);
+
+ui.sessionsBody.addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  const sessionId = Number(button.dataset.id);
+  const action = button.dataset.action;
+  try {
+    if (action === "edit") await editSession(sessionId);
+    if (action === "delete") await deleteSession(sessionId);
+    await refreshStats();
+    await refreshSessions();
+  } catch (err) {
+    alert(err.message);
+  }
+});
 
 Promise.all([refreshStats(), refreshSessions()]).catch((err) => {
   ui.sessionStatus.textContent = `Error: ${err.message}`;

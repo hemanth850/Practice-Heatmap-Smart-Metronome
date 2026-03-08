@@ -78,6 +78,43 @@ app.post("/api/sessions", (req, res) => {
   );
 });
 
+app.put("/api/sessions/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const { pieceName, minutes, bpm, notes } = req.body;
+  if (!id || !pieceName || !minutes || !bpm) {
+    return res.status(400).json({ error: "Missing required fields." });
+  }
+
+  db.run(
+    `
+    UPDATE sessions
+    SET piece_name = ?, minutes = ?, bpm = ?, notes = ?
+    WHERE id = ?
+    `,
+    [pieceName.trim(), Number(minutes), Number(bpm), (notes || "").trim(), id],
+    function onUpdate(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (this.changes === 0) {
+        return res.status(404).json({ error: "Session not found." });
+      }
+      return res.json({ ok: true });
+    }
+  );
+});
+
+app.delete("/api/sessions/:id", (req, res) => {
+  const id = Number(req.params.id);
+  if (!id) return res.status(400).json({ error: "Invalid session id." });
+
+  db.run("DELETE FROM sessions WHERE id = ?", [id], function onDelete(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Session not found." });
+    }
+    return res.json({ ok: true });
+  });
+});
+
 app.get("/api/stats", (_req, res) => {
   db.all("SELECT * FROM sessions", [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });

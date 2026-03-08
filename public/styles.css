@@ -146,6 +146,20 @@ td {
   vertical-align: top;
 }
 
+.row-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.tiny-btn {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+button.danger {
+  background: #b91c1c;
+}
+
 @media (max-width: 700px) {
   .heatmap {
     grid-template-columns: repeat(10, minmax(14px, 1fr));
