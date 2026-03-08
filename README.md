@@ -9,6 +9,7 @@ MVP web app to track music practice sessions, visualize consistency, and train w
 - Smart metronome with optional auto-ramp (+2 BPM every 16 beats)
 - Dashboard cards: total minutes, average BPM, streak, session count
 - 14x7 style heatmap over recent days
+- Weekly and monthly trend charts (practice minutes)
 - SQLite persistence for local development
 
 ## Tech Stack
