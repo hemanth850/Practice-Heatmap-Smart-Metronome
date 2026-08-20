@@ -3,94 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Practice Heatmap + Smart Metronome</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta name="description" content="A private, browser-based music practice timer, smart metronome, and consistency heatmap. No account required." />
+    <meta name="theme-color" content="#151321" />
+    <meta property="og:title" content="Hemanth's Studio | Smart Metronome & Heatmap" />
+    <meta property="og:description" content="Practice with a timer and smart metronome, then see your consistency build over time." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://studio.hemanthga.com" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://studio.hemanthga.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Hemanth's Studio","applicationCategory":"HealthApplication","operatingSystem":"Web","url":"https://studio.hemanthga.com","description":"A private browser-based music practice timer, smart metronome, and consistency heatmap."}</script>
+    <title>Hemanth's Studio | Smart Metronome & Heatmap</title>
   </head>
   <body>
-    <main class="app">
-      <h1>Practice Heatmap + Smart Metronome</h1>
-
-      <section class="panel">
-        <h2>Practice Session</h2>
-        <form id="session-form">
-          <label>
-            Piece
-            <input id="piece-name" required placeholder="Etude Op.10 No.1" />
-          </label>
-          <label>
-            Base BPM
-            <input id="base-bpm" type="number" min="30" max="260" value="80" required />
-          </label>
-          <label>
-            Notes
-            <textarea id="notes" rows="2" placeholder="Trouble in bar 24"></textarea>
-          </label>
-
-          <div class="buttons">
-            <button type="button" id="start-session">Start Session</button>
-            <button type="button" id="stop-session" disabled>Stop Session</button>
-            <button type="button" id="start-metro">Start Metronome</button>
-            <button type="button" id="stop-metro" disabled>Stop Metronome</button>
-          </div>
-
-          <label class="check">
-            <input type="checkbox" id="smart-ramp" checked />
-            Smart ramp (+2 BPM every 16 beats)
-          </label>
-        </form>
-
-        <div class="status-row">
-          <span id="session-status">Session: idle</span>
-          <span id="metro-status">Metronome: idle</span>
-          <span id="beat-indicator">Beat: -</span>
-        </div>
+    <a class="skip-link" href="#studio">Skip to Hemanth's Studio</a>
+    <header class="site-header shell"><a class="brand" href="/">HEMANTH'S<span>/STUDIO</span></a><a href="https://hemanthga.com/projects/practice-heatmap-smart-metronome" class="portfolio-link">A project by Hemanth G A</a></header>
+    <main>
+      <section class="hero shell"><p class="eyebrow"><span></span> PRIVATE BY DESIGN</p><h1>Build a practice<br /><em>you can feel.</em></h1><p>A calm space for focused reps, a responsive metronome, and an honest view of the work you have put in.</p><div class="hero-meta"><span>Runs in your browser</span><span>Sessions stay on this device</span><span>No account required</span></div></section>
+      <section id="studio" class="studio shell" aria-labelledby="studioTitle"><div class="section-heading"><div><p class="eyebrow">PRACTICE NOW</p><h2 id="studioTitle">Start where you are.</h2></div><p class="privacy-note">Your sessions are stored only in this browser. Clear them whenever you want.</p></div>
+        <div class="studio-grid"><section class="session-panel" aria-labelledby="sessionTitle"><div class="panel-top"><p class="panel-kicker">CURRENT SESSION</p><span id="sessionState" class="state-pill">Ready</span></div><h3 id="sessionTitle">What are you working on?</h3><label class="field-label" for="pieceInput">Piece, exercise, or focus</label><input id="pieceInput" type="text" maxlength="80" placeholder="e.g. Arpeggios in C major" autocomplete="off" /><div class="timer" id="timer" aria-live="polite">00:00:00</div><div class="session-actions"><button id="sessionButton" class="primary-button" type="button">Start practice</button><button id="finishButton" class="quiet-button" type="button" disabled>Finish & save</button></div><label class="field-label notes-label" for="notesInput">A quick note <span>(optional)</span></label><textarea id="notesInput" rows="2" maxlength="220" placeholder="What felt better? What needs a slower rep?"></textarea></section>
+          <section class="metro-panel" aria-labelledby="metroTitle"><div class="panel-top"><p class="panel-kicker">SMART METRONOME</p><span id="metroState" class="state-pill">Silent</span></div><h3 id="metroTitle">Find the pocket.</h3><div class="tempo-display"><button class="tempo-step" type="button" data-step="-1" aria-label="Decrease tempo by one beat per minute">-</button><output id="tempoValue">80</output><button class="tempo-step" type="button" data-step="1" aria-label="Increase tempo by one beat per minute">+</button><span>BPM</span></div><input id="tempoSlider" class="tempo-slider" type="range" min="35" max="240" value="80" aria-label="Tempo in beats per minute" /><div class="metro-options"><label>Time<select id="beatsSelect" aria-label="Beats per measure"><option value="4">4/4</option><option value="3">3/4</option><option value="6">6/8</option></select></label><label class="ramp-label"><input id="rampInput" type="checkbox" />Build tempo <span>+2 BPM every 16 beats</span></label></div><div id="beatLights" class="beat-lights" aria-label="Metronome beat indicator"></div><button id="metroButton" class="metro-button" type="button">Start metronome</button></section></div>
       </section>
-
-      <section class="panel">
-        <h2>Dashboard</h2>
-        <div class="stats">
-          <article>
-            <h3>Total Minutes</h3>
-            <p id="stat-minutes">0</p>
-          </article>
-          <article>
-            <h3>Average BPM</h3>
-            <p id="stat-bpm">0</p>
-          </article>
-          <article>
-            <h3>Streak (days)</h3>
-            <p id="stat-streak">0</p>
-          </article>
-          <article>
-            <h3>Sessions</h3>
-            <p id="stat-sessions">0</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>Practice Heatmap</h2>
-        <div id="heatmap" class="heatmap"></div>
-      </section>
-
-      <section class="panel">
-        <h2>Recent Sessions</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Piece</th>
-              <th>Minutes</th>
-              <th>BPM</th>
-              <th>Notes</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="sessions-body"></tbody>
-        </table>
-      </section>
+      <section class="insights shell" aria-labelledby="insightsTitle"><div class="section-heading"><div><p class="eyebrow">YOUR RHYTHM</p><h2 id="insightsTitle">Small sessions add up.</h2></div><button id="clearData" class="text-button" type="button">Clear local history</button></div><div class="metrics"><article><span>Total time</span><strong id="totalMinutes">0m</strong><p>Time you have shown up.</p></article><article><span>Current streak</span><strong id="streakValue">0 days</strong><p>Consecutive practice days.</p></article><article><span>Average tempo</span><strong id="averageTempo">--</strong><p>Across your saved sessions.</p></article><article><span>Sessions</span><strong id="sessionCount">0</strong><p>Recorded on this device.</p></article></div><div class="heatmap-card"><div class="heatmap-header"><div><h3>Consistency map</h3><p>Last 12 weeks of practice.</p></div><div class="legend"><span>Less</span><i></i><i></i><i></i><i></i><span>More</span></div></div><div id="heatmap" class="heatmap" aria-label="Practice consistency heatmap"></div></div><div class="history"><div class="history-heading"><h3>Recent sessions</h3><p id="historySummary">Your completed sessions will appear here.</p></div><div id="historyList" class="history-list"></div></div></section>
     </main>
-
-    <script src="app.js"></script>
+    <footer class="site-footer shell"><span>Practice privately. Progress honestly.</span><a href="https://hemanthga.com">hemanthga.com</a></footer><script src="/app.js"></script>
   </body>
 </html>

@@ -1,11 +1,10 @@
 {
   "name": "practice-heatmap-smart-metronome",
   "version": "1.0.0",
-  "description": "Practice Heatmap + Smart Metronome",
-  "main": "server.js",
+  "description": "Private browser-based practice timer, heatmap, and smart metronome",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "wrangler dev --assets public",
+    "deploy": "wrangler deploy"
   },
   "repository": {
     "type": "git",
@@ -19,8 +18,7 @@
     "url": "https://github.com/hemanth850/Practice-Heatmap-Smart-Metronome/issues"
   },
   "homepage": "https://github.com/hemanth850/Practice-Heatmap-Smart-Metronome#readme",
-  "dependencies": {
-    "express": "^5.2.1",
-    "sqlite3": "^5.1.7"
+  "devDependencies": {
+    "wrangler": "^4.124.0"
   }
 }

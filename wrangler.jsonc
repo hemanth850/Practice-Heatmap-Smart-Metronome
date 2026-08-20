@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hemanths-studio",
+  "compatibility_date": "2026-08-20",
+  "assets": { "directory": "./public" }
+}

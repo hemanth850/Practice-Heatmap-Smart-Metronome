@@ -1,42 +1,37 @@
-# Practice Heatmap + Smart Metronome
+# Hemanth's Studio
 
-MVP web app to track music practice sessions, visualize consistency, and train with a smart metronome.
+A private, browser-based music practice timer, smart metronome, and consistency heatmap.
+
+Sessions are kept only in the browser's local storage. There are no accounts, server database, analytics, or hosted user data.
 
 ## Features
 
-- Session logging with piece name, BPM, minutes, and notes
-- Edit/delete existing sessions
-- Smart metronome with optional auto-ramp (+2 BPM every 16 beats)
-- Dashboard cards: total minutes, average BPM, streak, session count
-- 14x7 style heatmap over recent days
-- Weekly and monthly trend charts (practice minutes)
-- SQLite persistence for local development
+- Practice timer and quick session notes
+- Audible metronome with accented downbeats
+- Optional tempo building: +2 BPM every 16 beats
+- Local-only session history, streaks, totals, and average tempo
+- Twelve-week practice heatmap
+- One-click removal of individual sessions or all local history
 
-## Tech Stack
-
-- Node.js + Express
-- SQLite (`sqlite3`)
-- Vanilla HTML/CSS/JavaScript frontend
-
-## Run Locally
+## Run locally
 
 ```bash
 npm install
-npm start
+npm run dev
 ```
 
-Open `http://localhost:3000`.
+## Deploy
 
-## API
+```bash
+npm run deploy
+```
 
-- `GET /api/sessions` -> latest sessions
-- `POST /api/sessions` -> create session
-- `PUT /api/sessions/:id` -> update session
-- `DELETE /api/sessions/:id` -> remove session
-- `GET /api/stats` -> aggregate stats
+The Cloudflare static-assets configuration publishes `public/`. After the first deploy, connect `studio.hemanthga.com` as a custom domain in the Worker settings.
 
-## Next Improvements
+## Search visibility
 
-- Add delete/edit session actions
-- Add weekly/monthly charts
-- Add user profiles + cloud sync
+The static page includes a canonical URL, metadata, structured WebApplication data, `robots.txt`, and a sitemap. After the domain is live, submit `https://studio.hemanthga.com/sitemap.xml` in Google Search Console.
+
+## Archived backend
+
+The former Express and SQLite implementation remains in repository history and `server.js`, but is no longer part of the deployed product.

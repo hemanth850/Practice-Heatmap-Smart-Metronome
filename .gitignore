@@ -1,3 +1,4 @@
 node_modules/
+.wrangler/
 data.sqlite
 npm-debug.log*
